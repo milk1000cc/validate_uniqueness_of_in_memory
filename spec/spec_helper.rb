@@ -19,6 +19,7 @@ class CreateAssociatedModelsForTesting < ActiveRecord::Migration
     end
     create_table :choices do |t|
       t.string  :choice_name
+      t.string  :note
       t.integer :question_id
     end
   end

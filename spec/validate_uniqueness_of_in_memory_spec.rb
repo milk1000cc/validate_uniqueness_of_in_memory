@@ -49,7 +49,7 @@ describe 'Question has Choices relationship WITH validate_uniqueness_of_in_memor
     validate :validate_unique_choices
 
     def validate_unique_choices
-      validate_uniqueness_of_in_memory(:choices, [:choice_name, :question_id], 'Choices must be unique.')
+      validate_uniqueness_of_in_memory(:choices, [:choice_name, :note, :question_id], 'Choices must be unique.')
     end    
   end
 
@@ -70,6 +70,16 @@ describe 'Question has Choices relationship WITH validate_uniqueness_of_in_memor
     question.should be_valid
 
     question.choices.build(:choice_name => "Thriller")
+    question.should_not be_valid
+    question.errors[:base].should include 'Choices must be unique.'
+  end
+
+  it "should validate uniqueness of multiple attributes properly" do
+    question.choices.build(:choice_name => "123", :note => '456')
+    question.choices.build(:choice_name => "1234", :note => '56')
+    question.should be_valid
+
+    question.choices.build(:choice_name => "123", :note => '456')
     question.should_not be_valid
     question.errors[:base].should include 'Choices must be unique.'
   end
